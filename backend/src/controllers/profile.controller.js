@@ -1,3 +1,5 @@
+// Controllers for public profile and link analytics.
+// These endpoints deliver profile pages, track clicks, and compute analytics.
 import Link from "../models/link.model.js";
 import User from "../models/user.model.js";
 
@@ -5,6 +7,7 @@ const getPublicProfileController = async (req, res) => {
   try {
     const { username } = req.params;
 
+    // Find the user by public username.
     const user = await User.findOne({
       username,
     });
@@ -16,6 +19,7 @@ const getPublicProfileController = async (req, res) => {
       });
     }
 
+    // Return all links that belong to the public profile owner.
     const links = await Link.find({ owner: user._id });
 
     res.status(200).json({
@@ -35,6 +39,7 @@ const trackLinkClickController = async (req, res) => {
   try {
     const { linkId } = req.params;
 
+    // Retrieve the link and increment the click counter.
     const link = await Link.findById(linkId);
 
     if (!link) {
@@ -48,6 +53,7 @@ const trackLinkClickController = async (req, res) => {
 
     await link.save();
 
+    // Redirect the visitor to the actual link URL.
     res.redirect(link.url);
   } catch (error) {
     res.status(500).json({
@@ -59,6 +65,7 @@ const trackLinkClickController = async (req, res) => {
 
 const getAnalyticsController = async (req, res) => {
   try {
+    // Retrieve all links for the authenticated user.
     const links = await Link.find({
       owner: req.user._id,
     });

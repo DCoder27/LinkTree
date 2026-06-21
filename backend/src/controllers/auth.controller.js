@@ -1,3 +1,5 @@
+// Controller for user authentication actions.
+// Handles user registration and login, including token creation and cookie storage.
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
 
@@ -5,6 +7,7 @@ const registerController = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    // Check if the email is already registered.
     const existingUser = await User.findOne({
       email,
     });
@@ -16,12 +19,14 @@ const registerController = async (req, res) => {
       });
     }
 
+    // Create a new user document.
     const user = await User.create({
       username,
       email,
       password,
     });
 
+    // Generate JWT and store it in a cookie.
     const token = generateToken(user._id);
     res.cookie("token", token);
 
@@ -46,6 +51,7 @@ const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Find user by email for authentication.
     const user = await User.findOne({
       email,
     });
@@ -57,6 +63,7 @@ const loginController = async (req, res) => {
       });
     }
 
+    // Compare submitted password against hashed password.
     const isMatch = user.comparePassword(password);
 
     if (!isMatch) {
@@ -66,6 +73,7 @@ const loginController = async (req, res) => {
       });
     }
 
+    // Generate JWT and set it as a cookie.
     const token = generateToken(user._id);
     res.cookie("token", token);
 

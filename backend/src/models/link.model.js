@@ -1,3 +1,4 @@
+// Link model definition for user-managed links and click tracking.
 import mongoose from "mongoose";
 
 const linkSchema = new mongoose.Schema(

@@ -1,5 +1,7 @@
 import { validationResult } from "express-validator";
 
+// Middleware that checks express-validator results and sends back
+// a 400 response if validation errors are present.
 const validate = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -13,4 +15,4 @@ const validate = (req, res, next) => {
   next();
 };
 
-export default validate;
+export default validate;  // Export validation middleware.

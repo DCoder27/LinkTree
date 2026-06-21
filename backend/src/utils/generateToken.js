@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 
+// Generate a JWT token for authenticated users.
+// The token payload contains the user id only.
 const generateToken = (id) => {
   return jwt.sign(
     {
@@ -12,4 +14,4 @@ const generateToken = (id) => {
   );
 };
 
-export default generateToken;
+export default generateToken; // Export helper for creating JWT tokens.

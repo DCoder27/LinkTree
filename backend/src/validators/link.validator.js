@@ -1,3 +1,4 @@
+// Validation rules for creating new links.
 import { body } from "express-validator";
 
 export const createLinkValidator = [

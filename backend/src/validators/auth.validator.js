@@ -1,3 +1,4 @@
+// Validation rules for authentication requests.
 import { body } from "express-validator";
 
 export const registerValidator = [
@@ -31,7 +32,5 @@ export const loginValidator = [
     .isEmail()
     .withMessage("Invalid email"),
 
-  body("password")
-  .notEmpty()
-  .withMessage("Password is required"),
+  body("password").notEmpty().withMessage("Password is required"),
 ];
