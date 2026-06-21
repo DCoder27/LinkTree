@@ -11,6 +11,7 @@ import {
   getMyLinksController,
   updateLinkController,
 } from "../controllers/link.controller.js";
+import { getAnalyticsController } from "../controllers/profile.controller.js";
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.get("/", protect, getMyLinksController);
 router.put("/:id", protect, updateLinkController);
 
 router.delete("/:id", protect, deleteLinkController);
+
+router.get("/analytics", protect, getAnalyticsController);
 
 export default router;
