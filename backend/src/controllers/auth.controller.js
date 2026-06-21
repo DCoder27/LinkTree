@@ -26,13 +26,18 @@ const registerController = async (req, res) => {
       password,
     });
 
-    // Generate JWT and store it in a cookie.
+    // Generate JWT and store it in a secure cookie.
     const token = generateToken(user._id);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    });
 
     res.status(201).json({
       success: true,
       message: "User registered successfully",
+      token,
       user: {
         id: user._id,
         username: user.username,
@@ -73,12 +78,17 @@ const loginController = async (req, res) => {
       });
     }
 
-    // Generate JWT and set it as a cookie.
+    // Generate JWT and set it as a secure cookie.
     const token = generateToken(user._id);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    });
 
     res.status(200).json({
       success: true,
+      token,
       user: {
         id: user._id,
         username: user.username,
@@ -93,4 +103,11 @@ const loginController = async (req, res) => {
   }
 };
 
-export { registerController, loginController };
+const getCurrentUser = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: req.user,
+  });
+};
+
+export { registerController, loginController, getCurrentUser };

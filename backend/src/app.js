@@ -17,10 +17,20 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Enable cross-origin requests for client applications.
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 // Log incoming requests with HTTP details.
 app.use(morgan("dev"));
+
+app.use(express.static("public"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "public", "index.html"));
+});
 
 // Authentication routes: register and login.
 app.use("/api/auth", authRoutes);

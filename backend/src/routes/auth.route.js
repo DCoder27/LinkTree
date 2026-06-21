@@ -2,9 +2,11 @@
 // Handles registration and login requests.
 import express from "express";
 
+import protect from "../middlewares/auth.middleware.js";
 import {
   loginController,
   registerController,
+  getCurrentUser,
 } from "../controllers/auth.controller.js";
 
 import {
@@ -15,6 +17,8 @@ import {
 import validate from "../middlewares/validation.middleware.js";
 
 const router = express.Router();
+
+router.get("/me", protect, getCurrentUser);
 
 // Register a new user with validation checks.
 router.post("/register", registerValidator, validate, registerController);

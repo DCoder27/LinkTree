@@ -6,7 +6,15 @@ import User from "../models/user.model.js";
 
 const protect = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    let token = req.cookies?.token;
+
+    if (!token && req.headers.authorization) {
+      const parts = req.headers.authorization.split(" ");
+      if (parts[0] === "Bearer" && parts[1]) {
+        token = parts[1];
+      }
+    }
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -16,7 +24,6 @@ const protect = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Fetch user profile without the password field.
     req.user = await User.findById(decoded.id).select("-password");
 
     next();
