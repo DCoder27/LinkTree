@@ -1,0 +1,35 @@
+import mongoose from "mongoose";
+
+const linkSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 6,
+    },
+
+    url: {
+      type: String,
+      required: true,
+    },
+
+    clicks: {
+      type: Number,
+      default: 0,
+    },
+
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+const Link = mongoose.model("Link", linkSchema);
+
+export default Link;
